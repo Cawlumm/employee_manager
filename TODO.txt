@@ -1,0 +1,16 @@
+<Authentication>
+When user logs out clear context user storage
+How to store image in mongodb
+Implment front end validation and error checking
+
+<CD CI>
+Upload sourcecode to git
+Learn how to create a pipeline from git to aws with Docker img in between
+Create a dockerfile for the application and push it to AWS ECR repo
+
+<Sessions>
+Implement a way to track user action during the Sessions
+If the user is not active for a period of time logout the user
+
+<Testing>
+Implement Testing with Jest

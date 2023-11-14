@@ -1,0 +1,14 @@
+{
+  "name": "employee_management_software",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "npm run watch --prefix server",
+    "deploy": "npm run build --prefix client && npm start --prefix server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
