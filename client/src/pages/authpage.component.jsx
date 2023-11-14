@@ -135,7 +135,7 @@ const Authentication = () => {
       //Stop loading after successful submission
       setLoading(false);
     },
-    [formData, mode, registerUser, loginUser]
+    [formData, mode, handleRegister, handleLogin, validateForm]
   );
  
   // Input change handler

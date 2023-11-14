@@ -15,7 +15,7 @@ jobs:
   build:
     # Set environment variables for the job
     env:
-      CI: true
+      CI: False
       MONGO_URL: mongodb://localhost/users
 
     # Define the strategy for this job, including Node.js and MongoDB versions

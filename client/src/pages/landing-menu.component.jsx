@@ -16,7 +16,6 @@ import DropdownMenu from "../components/dropdown-menu/dropdown-menu.component";
 import MenuLinks from "../components/menu-links/menu-links-component";
 
 const LandingMenu = () => {
-  const { isOpen, setIsOpen } = useState();
 
   return (
     // Main container
