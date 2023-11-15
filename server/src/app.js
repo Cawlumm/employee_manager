@@ -14,6 +14,7 @@ const app = express();
 
 /*==================================== MIDDLEWARE =========================================*/
 
+
 app.use(cors({
     origin: 'http://localhost:8000',
     credentials: true
