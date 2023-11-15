@@ -17,6 +17,6 @@ jobs:
       - name: Build the Docker image
         run: |
           docker build -t employee_manager .
-          docker info
+          docker tag employee_manager:latest cwlumm/employee_manager:latest
       - name: Push to Dockerhub
         run: docker push cwlumm/employee_manager:latest
