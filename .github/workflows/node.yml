@@ -1,5 +1,5 @@
 # Define the name of the GitHub Actions workflow
-name: NASA Project CI
+name: Employee Manager CI
 
 # Trigger the workflow when there is a push event to the 'main' branch
 # or when there is a pull request targeting the 'main' branch
