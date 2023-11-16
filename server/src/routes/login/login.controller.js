@@ -82,7 +82,7 @@ function loginUser(req, res, next) {
       return res
         .cookie("jwtToken", token, {
           httpOnly: true,
-          //secure: true,
+          secure: true,
           sameSite: "none",
           expires: new Date(Date.now() + expirationTime),
         })
