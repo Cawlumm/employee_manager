@@ -16,7 +16,7 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - name: Build the Docker image
         run: |
-          docker build -t employee_manager .
+          docker build -t employee_manager --build-arg MONGO_URL=${{secrets.MONGO_URL}} .
           docker tag employee_manager:latest cwlumm/employee_manager:latest
       - name: Push to Dockerhub
         run: docker push cwlumm/employee_manager:latest

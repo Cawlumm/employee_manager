@@ -2,7 +2,8 @@ FROM node:lts-alpine
 
 WORKDIR /app
 
-COPY .env .env 
+ARG MONGO_URL
+ENV MONGO_URL=$MONGO_URL
 
 COPY package*.json ./
 
