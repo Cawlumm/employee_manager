@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/v1";
+const API_URL = "http://3.141.14.220:8000/v1";
 
 async function httpRegisterUser(user) {
   try {
