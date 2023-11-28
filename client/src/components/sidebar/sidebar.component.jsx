@@ -23,8 +23,8 @@ const SideBar = () => {
 
   return (
     <aside
-      className={`bg-white h-[calc(100vh)] sm: sm:static sm:block sm:opacity-100 ${
-        isOpen ? "absolute w-46 z-10 opacity-75" : "hidden w-20"
+      className={`bg-white h-full sm:static sm:block sm:opacity-100 min-h-[900px] ${
+        isOpen ? "absolute w-48 z-10 opacity-75" : "hidden w-20"
       }`}
     >
       <div className="flex flex-col justify-start h-full">
@@ -42,7 +42,7 @@ const SideBar = () => {
         </ul>
 
         {/* Second list */}
-        <ul className="mt-auto flex w-full flex-col basis-2/12 items-center justify-start">
+        <ul className="mt-auto flex  flex-col basis-2/12 items-center justify-start">
           {settingsItems.map((item, index) => (
             <li
               key={index}

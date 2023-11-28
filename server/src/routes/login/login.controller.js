@@ -4,10 +4,10 @@ const jwt = require("jsonwebtoken");
 
 // Function to register a new user
 async function registerUser(req, res) {
+  const { email, username, password, fullname  } = req.body;
   try {
     // Validate that email and username exist in the request body
-    const { email, username, password,  } = req.body;
-    if (!email || !username || !password) {
+    if (!email || !username || !password || !fullname) {
       return res.status(400).json({
         success: false,
         message: "Email, username, and password are required.",
@@ -24,8 +24,9 @@ async function registerUser(req, res) {
     // Create a new user object with the generated userId and provided user data
     const newUser = new User({
       userId,
-      email: req.body.email,
-      username: req.body.username,
+      email: email,
+      fullname: fullname,
+      username: username,
     });
 
     // Register the user using passport-local-mongoose's register method

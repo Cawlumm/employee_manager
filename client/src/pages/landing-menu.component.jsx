@@ -19,7 +19,7 @@ const LandingMenu = () => {
 
   return (
     // Main container
-    <div className="landing-menu-container flex">
+    <div className="landing-menu-container flex h-full min-h-[900px]">
       {/* Sidebar component */}
       <SideBar className="" />
 
@@ -32,7 +32,7 @@ const LandingMenu = () => {
         </div>
 
         {/* Body */}
-        <div className="widgets-body-container relative flex sm:flex-row flex-col w-full py-3 w-full h-full">
+        <div className="widgets-body-container flex sm:flex-row flex-col w-full py-3 w-full h-full">
           {/* Left Section */}
           <div className="widgets-container-left flex flex-col h-full basis-2/3 w-full sm:pr-4">
             {/* Display widgets */}

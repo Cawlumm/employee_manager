@@ -1,5 +1,8 @@
-const API_URL = "http://3.141.14.220:8000/v1";
+const API_URL = "v1";
 
+/*=========================================================================================
+                                    AUTH REQUESTS
+==========================================================================================*/
 async function httpRegisterUser(user) {
   try {
     const response = await fetch(`${API_URL}/auth/register`, {
@@ -9,10 +12,10 @@ async function httpRegisterUser(user) {
       },
       body: JSON.stringify(user),
     });
-    console.log(response)
+    console.log(response);
     return response;
   } catch (err) {
-      alert('Registration failed. Invalid user.')
+    alert("Registration failed. Invalid user.");
   }
 }
 
@@ -22,9 +25,9 @@ async function httpLoginUser(user) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        credentials: 'include',
+        credentials: "include",
       },
-      
+
       body: JSON.stringify(user),
     });
 
@@ -50,46 +53,72 @@ async function httpLoginUser(user) {
 }
 
 async function httpGetUser() {
-    try {
-      const response = await fetch(`${API_URL}/auth/user`, {
-        method: 'GET',
-        credentials: 'include', // Include credentials (cookies) in the request
-      });
-      // Check if the response is successful (status code 2xx)
-      if (response) {
-        // Assuming the response contains JSON data, use response.json()
-        const userData = await response.json();
-        return userData;
-      } else {
-        // If the response status is not ok, return an object with ok set to false
-        return { ok: false };
-      }
-    } catch (err) {
-      console.error(err);
+  try {
+    const response = await fetch(`${API_URL}/auth/user`, {
+      method: "GET",
+      credentials: "include", // Include credentials (cookies) in the request
+    });
+    // Check if the response is successful (status code 2xx)
+    if (response) {
+      // Assuming the response contains JSON data, use response.json()
+      const userData = await response.json();
+      return userData;
+    } else {
+      // If the response status is not ok, return an object with ok set to false
       return { ok: false };
     }
+  } catch (err) {
+    console.error(err);
+    return { ok: false };
   }
+}
 
-  async function httpLogoutUser() {
-    try {
-      const response = await fetch(`${API_URL}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include', // Include credentials (cookies) in the request
-      });
-      // Check if the response is successful (status code 2xx)
-      if (response.ok) {
-        // Assuming the response contains JSON data, use response.json()
-        return await response.json();
-      } else {
-        // If the response status is not ok, return an object with ok set to false
-        return { ok: false };
-      }
-    } catch (err) {
-      console.error(err);
+async function httpLogoutUser() {
+  try {
+    const response = await fetch(`${API_URL}/auth/logout`, {
+      method: "POST",
+      credentials: "include", // Include credentials (cookies) in the request
+    });
+    // Check if the response is successful (status code 2xx)
+    if (response.ok) {
+      // Assuming the response contains JSON data, use response.json()
+      return await response.json();
+    } else {
+      // If the response status is not ok, return an object with ok set to false
       return { ok: false };
     }
+  } catch (err) {
+    console.error(err);
+    return { ok: false };
   }
-  
+}
 
+/*=========================================================================================
+                                    MENU REQUESTS
+==========================================================================================*/
 
-export { httpRegisterUser, httpLoginUser, httpGetUser, httpLogoutUser };
+async function httpGetNotificationsLength(title, userId) {
+  fetch(`${API_URL}/${title}/length/${userId}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(
+        `Notifications length for user ${userId}: ${data.notificationCount}`
+      );
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+export {
+  httpRegisterUser,
+  httpLoginUser,
+  httpGetUser,
+  httpLogoutUser,
+  httpGetNotificationsLength,
+};

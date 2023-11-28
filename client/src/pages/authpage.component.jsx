@@ -85,8 +85,12 @@ const Authentication = () => {
     if (response.ok) {
       displayMessage("success", response.message);
       navigate("/");
-    } else {
-      displayMessage("error", response.message);
+    } else if (!response.ok) {
+      if(response.message) {
+        displayMessage("error", response.message);
+      } else {
+        alert('Something went wrong... \r\nPlease try again later.');
+      }
     }
   };
   
@@ -148,8 +152,8 @@ const Authentication = () => {
   };
 
   return (
-    <div className="flex login-container w-screen h-screen">
-      <div className="p-4 flex flex-col bg-gray-200 w-full max-w-[300px]">
+    <div className="flex sm:flex-row flex-col login-container w-screen h-screen">
+      <div className="p-4 flex sm:flex-col bg-gray-200 w-full sm:max-w-[300px]">
         <div className="p-2 text-blue-500 text-lg hover:text-blue-700 hover:bg-gray-300 cursor-pointer">
           <Link to="/">Home</Link>
         </div>
