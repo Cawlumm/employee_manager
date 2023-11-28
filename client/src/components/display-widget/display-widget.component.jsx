@@ -4,8 +4,10 @@ import { ReactComponent as DotMenu } from "../../assets/dotmenu.svg";
 import DisplayWidgetPopup from "../display-widget-popup/display-widget-popup.component";
 
 import { httpGetNotificationsLength } from "../../hooks/requests";
+import { useAuth } from "../../contexts/auth.context";
 
 const DisplayWidget = ({ icon, title, margin, bgColor }) => {
+  const { currentUser } = useAuth();
   const [isloading, setIsLoading] = useState(false);
   const [count, setCount] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -19,7 +21,7 @@ const DisplayWidget = ({ icon, title, margin, bgColor }) => {
       setIsLoading(true);
 
       try {
-        const data = httpGetNotificationsLength(title, userId);
+        const data = httpGetNotificationsLength(title, currentUser.userId);
         setCount(data.notificationCount); 
       } catch (error) {
         console.error("Error fetching data:", error);
