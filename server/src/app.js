@@ -12,6 +12,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/user.mongo')
 const app = express();
 
+
 /*==================================== MIDDLEWARE =========================================*/
 
 app.use(cors({
