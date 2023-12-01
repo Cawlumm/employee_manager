@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/auth.context";
 import { ReactComponent as UserImg } from "../../assets/user.svg";
-import { ReactComponent as Exit } from "../../assets/x.svg";
 
 const User = () => {
   const [isHovering, setIsHovering] = useState(false);
@@ -62,56 +61,44 @@ const User = () => {
       )}
       {isOpen && (
         <div
-          className="absolute top-20 sm:right-12 z-10 right-0 bg-white w-1/5 min-w-[300px] h-auto shadow-lg rounded-sm p-2 border-grey-200 bg-whitesmoke"
+          className="absolute top-20 sm:right-12 z-10 right-0 bg-white w-1/5 min-w-[450px] h-auto shadow-lg rounded-sm p-2 border-grey-200 bg-whitesmoke"
           onMouseDown={(e) => e.preventDefault()}
         >
           <div className="flex flex-col text-sm text-black">
-            <div className="flex justify-end ">
-              <Exit
-                className="cursor-pointer"
-                onClick={handleMouseClick}
-              />
-            </div>
-            <div className="flex justify-around text-md my-5">
-              <UserImg
-                className={`bg-green-600 rounded-full mx-1 p-1 cursor-pointer `}
-              />
-              <div className="">
-                <div className="">
-                    {isAuthenticated ? `Hi ${currentUser.username}!` : "Guest"}
+            <div className="flex flex-col justify-around text-md my-3 px-3 ">
+              <div className="flex flex-row justify-start items-center border-b-2 border-gray pb-2 mb-2">
+                <div class="w-14 h-14 mr-4 bg-green-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                  CL
                 </div>
-                <div className="font-bold">
-                    {isAuthenticated ? currentUser.email : "Please Login"}
+                <div className="">
+                  <div className="font-bold">
+                    {isAuthenticated ? `Hi ${currentUser.username}!` : "Guest"}
+                  </div>
+                  <div className="italic">
+                    {isAuthenticated ? currentUser.email : ""}
+                  </div>
                 </div>
               </div>
-              <div className="my-auto">
-              {isAuthenticated ? (
-                <button
-                  onClick={handleLogout}
-                  className="p-2 hover:text-blue-500"
-                >
-                  Logout
-                </button>
-              ) : (
-                <Link
-                  to="/authentication"
-                  className=" border-gray-500 border-2 p-2 hover:bg-green-600 hover:text-white"
-                  onClick={handleMouseClick}
-                >
-                  Login
-                </Link>
-              )}
-            </div>
-            </div>
 
-            {/* <div className="mx-auto">
-              {isAuthenticated && (
-                <button className="rounded-full border-gray-500 border-2 p-2 hover:bg-green-600 hover:border-green-600 hover:text-white hover:border-white">
-                  Manage your Account
-                </button>
-              )}
-            </div> */}
-
+              <div className="flex justify-end ">
+                {isAuthenticated ? (
+                  <button
+                    onClick={handleLogout}
+                    className="border-black-300 border-2 bg-gray-200 p-2 text-gray-600 font-bold hover:text-blue-500"
+                  >
+                    Sign Out
+                  </button>
+                ) : (
+                  <Link
+                    to="/authentication"
+                    className="border-black-300 border-2 bg-gray-200 p-2 text-gray-600 font-bold hover:text-blue-500"
+                    onClick={handleMouseClick}
+                  >
+                    Sign In
+                  </Link>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

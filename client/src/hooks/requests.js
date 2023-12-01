@@ -96,29 +96,45 @@ async function httpLogoutUser() {
 /*=========================================================================================
                                     MENU REQUESTS
 ==========================================================================================*/
+async function httpGetLength(title, userId) {
+  try {
+    const response = await fetch(`${API_URL}/menu/${title}/length/${userId}`);
 
-async function httpGetNotificationsLength(title, userId) {
-  fetch(`${API_URL}/${title}/length/${userId}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(
-        `Notifications length for user ${userId}: ${data.notificationCount}`
-      );
-      return data;
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(`Notifications length for user ${userId}: ${data.notificationCount}`);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error; 
+  }
 }
+
+async function httpGetNotifications(title, userId) {
+  try {
+    const response = await fetch(`${API_URL}/menu/${title}/${userId}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(`Notifications for user ${userId}: ${data}`);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error; 
+  }
+}
+
 export {
   httpRegisterUser,
   httpLoginUser,
   httpGetUser,
   httpLogoutUser,
-  httpGetNotificationsLength,
+  httpGetLength,
+  httpGetNotifications
 };

@@ -1,14 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { ReactComponent as DotMenu } from "../../assets/dotmenu.svg";
 import DisplayWidgetPopup from "../display-widget-popup/display-widget-popup.component";
 
-import { httpGetNotificationsLength } from "../../hooks/requests";
+import { httpGetLength } from "../../hooks/requests";
 import { useAuth } from "../../contexts/auth.context";
 
 const DisplayWidget = ({ icon, title, margin, bgColor }) => {
   const { currentUser } = useAuth();
-  const [isloading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [count, setCount] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
@@ -17,20 +17,24 @@ const DisplayWidget = ({ icon, title, margin, bgColor }) => {
   const popupRef = useRef(null);
 
   useEffect(() => {
-    const fetchNotificationsLength = async () => {
+    const fetchLength = async () => {
       setIsLoading(true);
 
       try {
-        const data = httpGetNotificationsLength(title, currentUser.userId);
-        setCount(data.notificationCount); 
+        const data = await httpGetLength(
+          title.toLowerCase(),
+          currentUser.userId
+        );
+        setCount(data.notificationCount);
       } catch (error) {
+        setIsLoading(false);
         console.error("Error fetching data:", error);
       }
 
       setIsLoading(false);
     };
 
-    fetchNotificationsLength();
+    fetchLength();
   }, [title]);
 
   const handleTogglePopup = () => {
@@ -48,19 +52,19 @@ const DisplayWidget = ({ icon, title, margin, bgColor }) => {
       >
         <div
           className={`flex p-3 w-full ${margin} rounded relative shadow-xl ${bgColor} ${
-            isloading && "opacity-50"
+            isLoading && "opacity-50"
           }`}
         >
           <div className="basis-1/2">
             {icon && React.cloneElement(icon, { className: "p-1" })}
-            {isloading ? (
+            {isLoading ? (
               <p className="text-white text-bold text-lg p-1">Loading...</p>
             ) : (
               <p className="text-white text-bold text-lg p-1">{title}</p>
             )}
           </div>
           <div className="basis-1/2 text-center">
-            {!isloading && (
+            {!isLoading && (
               <p className="w-full text-white text-bold text-6xl">{count}</p>
             )}
             <button
