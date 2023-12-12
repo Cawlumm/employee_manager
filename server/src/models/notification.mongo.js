@@ -19,6 +19,9 @@ const detailSchema = new mongoose.Schema({
 
 const notificationSchema = new mongoose.Schema({
   userId: { type: Number, required: true },
+  approvalId: Number,
+  approved: Boolean,
+  processCode: String,
   title: String,
   created: Date,
   reason: String,

@@ -4,11 +4,13 @@ import { useAuth } from "../../contexts/auth.context";
 import { ReactComponent as UserImg } from "../../assets/user.svg";
 
 const User = () => {
+  // State varaibales
   const [isHovering, setIsHovering] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser, logoutUser, isAuthenticated } = useAuth();
   let hoverTimeout;
 
+  // Event handlers
   const handleMouseEnter = () => {
     hoverTimeout = setTimeout(() => {
       setIsHovering(true);
@@ -29,10 +31,13 @@ const User = () => {
   };
   const handleLogout = async () => {
     await logoutUser();
+    setIsOpen(!isOpen);
   };
 
   return (
     <div className="flex items-center">
+      {/* User profile image */}
+
       <button
         className=""
         onClick={handleMouseClick}
@@ -44,6 +49,8 @@ const User = () => {
           className={`bg-green-600 rounded-full mx-1 p-1 cursor-pointer `}
         />
       </button>
+
+      {/* User popup */}
       {isHovering && isAuthenticated && (
         <div className="user-popup-container overflow-hidden absolute top-16 right-1 max-w-[cal(-8px + 100vw)] z-10 p-1 rounded shadow bg-green-600 opacity-90">
           <div className="flex flex-col justify-center text-sm">
@@ -59,9 +66,11 @@ const User = () => {
           </div>
         </div>
       )}
+
+      {/* Main user dropdown */}
       {isOpen && (
         <div
-          className="absolute top-20 sm:right-12 z-10 right-0 bg-white w-1/5 min-w-[450px] h-auto shadow-lg rounded-sm p-2 border-grey-200 bg-whitesmoke"
+          className="absolute top-[50px] right-[1vw] z-10 bg-white w-[80%] max-w-[450px] h-auto shadow-lg rounded-sm p-2 border-grey-200 bg-whitesmoke"
           onMouseDown={(e) => e.preventDefault()}
         >
           <div className="flex flex-col text-sm text-black">
@@ -80,6 +89,7 @@ const User = () => {
                 </div>
               </div>
 
+              {/* Sign Out or Sign In button */}
               <div className="flex justify-end ">
                 {isAuthenticated ? (
                   <button

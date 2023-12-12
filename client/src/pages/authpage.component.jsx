@@ -43,8 +43,7 @@ const Authentication = () => {
     return emailRegex.test(email);
   };
 
-  // Validation logic for the form
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const validationErrors = {};
 
     if (isEmpty(formData.username)) {
@@ -69,10 +68,9 @@ const Authentication = () => {
     }
 
     return validationErrors;
-  };
+  }, [formData, mode, isEmpty, isValidEmail]);
 
-  // Login logic
-  const handleLogin = async () => {
+  const handleLogin = useCallback(async () => {
     setMessage("");
 
     // Handle login logic
@@ -80,22 +78,28 @@ const Authentication = () => {
       username: formData.username,
       password: formData.password,
     };
-    const response = await loginUser(user);
-    // Add any necessary logic after login
-    if (response.ok) {
-      displayMessage("success", response.message);
-      navigate("/");
-    } else if (!response.ok) {
-      if(response.message) {
-        displayMessage("error", response.message);
-      } else {
-        alert('Something went wrong... \r\nPlease try again later.');
+
+    try {
+      const response = await loginUser(user);
+
+      // Add any necessary logic after login
+      if (response.ok) {
+        displayMessage("success", response.message);
+        navigate("/");
+      } else if (!response.ok) {
+        if (response.message) {
+          displayMessage("error", response.message);
+        } else {
+          alert('Something went wrong... \r\nPlease try again later.');
+        }
       }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("An error occurred during login. Please try again later.");
     }
-  };
+  }, [formData, loginUser, displayMessage, navigate]);
   
-  // Register logic
-  const handleRegister = async () => {
+  const handleRegister = useCallback(async () => {
     // Handle register logic
     const user = {
       username: formData.username,
@@ -103,14 +107,20 @@ const Authentication = () => {
       fullname: formData.fullName,
       email: formData.email,
     };
-    const response = await registerUser(user);
 
-    if (response.ok) {
-      setMode("login");
-    } else {
-      alert("Registration failed. Please check your details and try again.");
+    try {
+      const response = await registerUser(user);
+
+      if (response.ok) {
+        setMode("login");
+      } else {
+        alert("Registration failed. Please check your details and try again.");
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      alert("An error occurred during registration. Please try again later.");
     }
-  };
+  }, [formData, registerUser, setMode]);
   
   // Form submission handler
   const handleSubmit = useCallback(
@@ -139,7 +149,7 @@ const Authentication = () => {
       //Stop loading after successful submission
       setLoading(false);
     },
-    [formData, mode, handleRegister, handleLogin, validateForm]
+    [ mode, handleRegister, handleLogin, validateForm]
   );
  
   // Input change handler
@@ -152,8 +162,8 @@ const Authentication = () => {
   };
 
   return (
-    <div className="flex sm:flex-row flex-col login-container w-screen h-screen">
-      <div className="p-4 flex sm:flex-col bg-gray-200 w-full sm:max-w-[300px]">
+    <div className="flex lg:flex-row sm:flex-col login-container w-screen h-screen">
+      <div className="p-4 flex lg:flex-col bg-gray-200 w-full lg:max-w-[300px]">
         <div className="p-2 text-blue-500 text-lg hover:text-blue-700 hover:bg-gray-300 cursor-pointer">
           <Link to="/">Home</Link>
         </div>
@@ -170,7 +180,7 @@ const Authentication = () => {
           Register
         </div>
       </div>
-      <div className="flex flex-col sm:p-6 sm:px-20 sm:m-0 m-3 px-0  p-0 w-full">
+      <div className="flex flex-col lg:p-6 lg:px-20 lg:m-0 m-3 px-0  p-0 w-full">
         <div className="text-4xl py-2">
           {mode === "login" ? "Login" : "Register"}
         </div>
@@ -201,7 +211,7 @@ const Authentication = () => {
                   {errors[field.name] && (
                     <div className="flex flex-row mt-1 items-center">
                       <Error />
-                      <p className="text-red-500 sm:text-xl text-sm pl-2">{errors[field.name]}</p>
+                      <p className="text-red-500 lg:text-xl text-sm pl-2">{errors[field.name]}</p>
                     </div>
                   )}
                 </div>

@@ -122,7 +122,24 @@ async function httpGetNotifications(title, userId) {
     }
 
     const data = await response.json();
-    console.log(`Notifications for user ${userId}: ${data}`);
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error; 
+  }
+}
+
+async function httpApproveApproval(userId, approvalId) {
+  try {
+    const response = await fetch(`${API_URL}/menu/approvals/approve/${userId}/${approvalId}`, {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
     return data;
   } catch (error) {
     console.error("Error:", error);
@@ -136,5 +153,6 @@ export {
   httpGetUser,
   httpLogoutUser,
   httpGetLength,
-  httpGetNotifications
+  httpGetNotifications,
+  httpApproveApproval,
 };

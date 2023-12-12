@@ -25,7 +25,7 @@ const DisplayWidget = ({ icon, title, margin, bgColor }) => {
           title.toLowerCase(),
           currentUser.userId
         );
-        setCount(data.notificationCount);
+        setCount(data.count);
       } catch (error) {
         setIsLoading(false);
         console.error("Error fetching data:", error);

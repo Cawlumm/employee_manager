@@ -23,8 +23,8 @@ const SideBar = () => {
 
   return (
     <aside
-      className={`bg-white h-full sm:static sm:block sm:opacity-100 min-h-[900px] ${
-        isOpen ? "absolute w-48 z-10 opacity-75" : "hidden w-20"
+      className={`bg-white h-screen lg:static lg:block lg:opacity-100  ${
+        isOpen ? "absolute w-56 z-10 sm:opacity-75" : "sm:hidden w-24"
       }`}
     >
       <div className="flex flex-col justify-start h-full">

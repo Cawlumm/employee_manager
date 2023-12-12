@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 // Importing icons
 import { ReactComponent as ThumbsUp } from "../assets/thumbs-up.svg";
 import { ReactComponent as Message } from "../assets/message.svg";
@@ -16,14 +14,14 @@ import DropdownMenu from "../components/dropdown-menu/dropdown-menu.component";
 import MenuLinks from "../components/menu-links/menu-links-component";
 
 const LandingMenu = () => {
-
   return (
     // Main container
-    <div className="landing-menu-container flex h-full min-h-[900px]">
-      {/* Sidebar component */}
-      <SideBar className="" />
-
-      <div className="menu-right-container flex flex-col p-3 w-full">
+    <div className="landing-menu-container flex h-full">
+      <div className="h-[95%]">
+        {/* Sidebar component */}
+        <SideBar className="" />
+      </div>
+      <div className="menu-right-container flex flex-col p-3 w-full h-[95%]">
         {/* Header */}
         <div className="bg-blue-400 p-3 shadow-lg">
           <p className="text-white font-bold text-6xl">
@@ -32,39 +30,39 @@ const LandingMenu = () => {
         </div>
 
         {/* Body */}
-        <div className="widgets-body-container flex sm:flex-row flex-col w-full py-3 w-full h-full">
+        <div className="widgets-body-container flex sm:flex-col md:flex-col lg:flex-row w-full py-3 w-full h-full">
           {/* Left Section */}
-          <div className="widgets-container-left flex flex-col h-full basis-2/3 w-full sm:pr-4">
+          <div className="widgets-container-left flex flex-col h-full basis-2/3 w-full lg:pr-4">
             {/* Display widgets */}
-            <div className="display-widgets-container flex sm:flex-row flex-col w-full sm:h-1/5 justify-between">
+            <div className="display-widgets-container flex sm:flex-col md:flex-row lg:flex-row w-full sm:h-1/5 lg:min-h-[150px] md:min-h-[150px] justify-between">
               <DisplayWidget
                 icon={<ThumbsUp />}
                 title="Approvals"
                 count={0}
-                margin="mb-4 sm:mr-4 "
+                margin="mb-4 lg:mr-4 md:mr-4 "
                 bgColor="bg-emerald-700"
               />
               <DisplayWidget
                 icon={<Message />}
                 title="Notifications"
                 count={0}
-                margin="mb-4 sm:mr-4"
+                margin="mb-4 lg:mr-4 md:mr-4"
                 bgColor="bg-amber-600"
               />
               <DisplayWidget
                 icon={<Check />}
                 title="Alerts"
                 count={0}
-                margin="mb-4 sm:mr-0"
+                margin="mb-4 lg:mr-0"
                 bgColor="bg-lime-600"
               />
             </div>
 
             {/* Menu container */}
-            <div className="menu-container flex md:flex-col sm:flex-row lg:flex-row flex-col w-full sm:h-4/5">
+            <div className="menu-container flex md:flex-col sm:flex-col lg:flex-row w-full h-full lg:h-4/5 md:max-h-[200px] lg:max-h-[500px] lg:min-h-[500px]">
               {/* Left DropdownMenu */}
-              <div className="flex flex-col basis-1/2 bg-white m-1 rounded shadow-2xl sm:overflow-scroll">
-                <div className="flex justify-between p-2">
+              <div className="flex flex-col basis-1/2 bg-white m-1 rounded shadow-2xl sm:overflow-scroll ">
+                <div className="flex justify-between p-2 ">
                   <p className="text-lg">Landing Menu</p>
                   <DotMenuBlack className="" />
                 </div>
@@ -173,7 +171,7 @@ const LandingMenu = () => {
               </div>
 
               {/* Right container */}
-              <div className="flex flex-col basis-1/2 bg-white m-1 rounded shadow-2xl overflow-auto">
+              <div className="flex flex-col basis-1/2 bg-white m-1 rounded shadow-2xl ">
                 <div className="flex justify-between p-2">
                   <p className="text-lg">Favorites</p>
                   <div className="flex">

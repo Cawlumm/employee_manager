@@ -9,22 +9,22 @@ import { httpGetNotifications } from "../../hooks/requests";
 const FilterOptions = ({ handleFilter, filter }) => {
   return (
     <div className="flex text-xl">
-      <a
+      <span
         onClick={() => handleFilter("code")}
         className={`pr-5 p-2 cursor-pointer ${
           filter === "code" ? "text-blue-400" : ""
         }`}
       >
         By Process Code
-      </a>
-      <a
+      </span>
+      <span
         onClick={() => handleFilter("date")}
         className={`p-2 cursor-pointer ${
           filter === "date" ? "text-blue-400" : ""
         }`}
       >
         By Date
-      </a>
+      </span>
     </div>
   );
 };
@@ -41,7 +41,7 @@ const ApprovalItem = ({ approval, handleApprovalClick }) => {
         <input type="checkbox" className="bg-gray-400 h-6 w-6 cursor-pointer" />
       </div>
       <div className="basis-11/12">
-        <p className="text-xl">{approval.title}</p>
+        <p className="text-xl">{approval.processCode}: {approval.title}</p>
         <div className="flex justify-between">
           <p className="italic text-sm">
             ${approval.header.totalAmount} {approval.detail.description}
@@ -66,7 +66,8 @@ const DisplayWidgetPopup = ({ togglePopup, title }) => {
     try {
       setIsLoading(true);
       const details = await httpGetNotifications(title.toLowerCase(), userId);
-      setState(details.notifications);
+      setState(details[title.toLowerCase()]);
+      console.log(details[title.toLowerCase()])
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -76,9 +77,7 @@ const DisplayWidgetPopup = ({ togglePopup, title }) => {
 
   // Effect to fetch data on component mount
   useEffect(() => {
-    if (title === "Notifications") {
-      fetchData(title, currentUser.userId);
-    }
+    fetchData(title, currentUser.userId);
   }, [title, currentUser.userId]);
 
   // Function to handle filter changes
@@ -105,7 +104,7 @@ const DisplayWidgetPopup = ({ togglePopup, title }) => {
   return (
     <>
       <div className="z-10 fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div className="flex flex-col bg-white w-3/4 sm:h-4/5 h-3/5">
+        <div className="flex flex-col bg-white sm:w-full sm:h-3/5 lg:w-3/4 lg:h-4/5">
           <div className="flex flex-col basis-2/12 text-3xl p-3">
             <div className="basis-1/2 pl-4">{title}</div>
             <div className="bg-gray-300 basis-1/2 "></div>
@@ -113,9 +112,9 @@ const DisplayWidgetPopup = ({ togglePopup, title }) => {
 
           {/* Conditional rendering based on loading state */}
           {!isLoading ? (
-            <div className="flex basis-9/12 sm:flex-row flex-col py-2 p-3">
+            <div className="bg-white flex basis-9/12 sm:flex-col lg:flex-row h-full py-2 p-3">
               {/* Left side content */}
-              <div className="basis-1/2 p-2 border-r-2">
+              <div className="flex flex-col basis-1/2 p-2 sm:border-b-2 lg:border-r-2 h-full">
                 {/* Filter options */}
                 <FilterOptions handleFilter={handleFilter} filter={filter} />
 
@@ -145,9 +144,9 @@ const DisplayWidgetPopup = ({ togglePopup, title }) => {
               </div>
 
               {/* Right side content */}
-              <div className="basis-1/2">
+              <div className="bg-white flex flex-col basis-1/2 h-full overflow-scroll">
                 {selectedApproval && (
-                  <ApprovalList selectedApproval={selectedApproval} />
+                  <ApprovalList selectedApproval={selectedApproval} title={title}/>
                 )}
               </div>
             </div>

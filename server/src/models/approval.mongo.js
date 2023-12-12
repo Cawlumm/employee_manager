@@ -1,7 +1,27 @@
 const mongoose = require('mongoose');
 
+const headerSchema = new mongoose.Schema({
+  fiscalYear: Number,
+  orderNumber: Number,
+  description: String,
+  totalAmount: Number,
+  requisitionNumber: Number,
+  buyerID: String,
+  vendor: String,
+  deliveryAddress: String,
+});
+
+const detailSchema = new mongoose.Schema({
+  account: String,
+  description: String,
+  amount: Number,
+});
+
 const approvalSchema = new mongoose.Schema({
+    approvalId: { type: Number, required: true },
     userId: { type: Number, required: true },
+    approved: Boolean,
+    processCode: String,
     title: String,
     created: Date,
     reason: String,
