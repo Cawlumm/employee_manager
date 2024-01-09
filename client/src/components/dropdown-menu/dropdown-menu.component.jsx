@@ -1,8 +1,14 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
+import { useAuth } from "../../contexts/auth.context";
 
 import { ReactComponent as DropDownArrow } from "../../assets/dropdownarrow.svg";
 
-const DropdownMenu = ({ title, options }) => {
+import { httpSaveFavoriteLink } from "../../hooks/requests";
+
+const DropdownMenu = ({ label, options, url }) => {
+  const { currentUser } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownCount, setDropdownCount] = useState(0);
 
@@ -19,13 +25,23 @@ const DropdownMenu = ({ title, options }) => {
     }
   };
 
+  const handleUrlClick = () => {
+    httpSaveFavoriteLink(currentUser.userId, label, url);
+  };
+
   return (
     <div className="">
       <button
         className="flex items-center px-4 py-2 text-gray-700 hover:text-gray-900"
-        onClick={options ? toggleDropdown : undefined}
+        onClick={options && toggleDropdown}
       >
-        {title}
+        {!options ? (
+          <Link to={url} onClick={url ? handleUrlClick : undefined}>
+            {label}
+          </Link>
+        ) : (
+          <span>{label}</span>
+        )}
         <span className={`ml-2 ${isOpen ? "transform rotate-90" : ""}`}>
           {options && <DropDownArrow />}
         </span>
@@ -40,7 +56,8 @@ const DropdownMenu = ({ title, options }) => {
           {options.map((option, index) => (
             <DropdownMenu
               key={index}
-              title={option.label}
+              label={option.label}
+              url={option.url}
               options={option.options}
             />
           ))}

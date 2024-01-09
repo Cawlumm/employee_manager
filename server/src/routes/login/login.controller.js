@@ -4,10 +4,10 @@ const jwt = require("jsonwebtoken");
 
 // Function to register a new user
 async function registerUser(req, res) {
-  const { email, username, password, fullname  } = req.body;
+  const { email, username, password, fullName } = req.body;
   try {
     // Validate that email and username exist in the request body
-    if (!email || !username || !password || !fullname) {
+    if (!email || !username || !password || !fullName) {
       return res.status(400).json({
         success: false,
         message: "Email, username, and password are required.",
@@ -25,7 +25,7 @@ async function registerUser(req, res) {
     const newUser = new User({
       userId,
       email: email,
-      fullname: fullname,
+      fullName: fullName,
       username: username,
     });
 
@@ -72,10 +72,23 @@ function loginUser(req, res, next) {
     }
 
     // Log in the user and issue a JWT token for authentication
-    req.logIn(user, function (err) {
+    req.logIn(user, async function (err) {
       if (err) {
         return res.status(500).json({ success: false, message: err });
       }
+
+      try {
+        // Update the lastLoggedIn property of the user
+        await User.findOneAndUpdate(
+          { username: user.username }, 
+          { lastLoggedIn: new Date().toLocaleString() },
+          { new: true }
+        );
+      } catch (err) {
+        console.error("Error updating lastLoggedIn:", error.message);
+        return res.status(500).json({ success: false, message: err });
+      }
+
       // Generate JWT token with a 2-hour expiration time
       const expirationTime = 2 * 60 * 60 * 1000; // 2 hours
       const token = jwt.sign({ user: user }, "secretkey");

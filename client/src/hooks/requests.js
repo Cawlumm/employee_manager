@@ -105,11 +105,13 @@ async function httpGetLength(title, userId) {
     }
 
     const data = await response.json();
-    console.log(`Notifications length for user ${userId}: ${data.notificationCount}`);
+    console.log(
+      `Notifications length for user ${userId}: ${data.notificationCount}`
+    );
     return data;
   } catch (error) {
     console.error("Error:", error);
-    throw error; 
+    throw error;
   }
 }
 
@@ -125,15 +127,18 @@ async function httpGetNotifications(title, userId) {
     return data;
   } catch (error) {
     console.error("Error:", error);
-    throw error; 
+    throw error;
   }
 }
 
 async function httpApproveApproval(userId, approvalId) {
   try {
-    const response = await fetch(`${API_URL}/menu/approvals/approve/${userId}/${approvalId}`, {
-      method: "POST",
-    });
+    const response = await fetch(
+      `${API_URL}/menu/approvals/approve/${userId}/${approvalId}`,
+      {
+        method: "POST",
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -143,9 +148,79 @@ async function httpApproveApproval(userId, approvalId) {
     return data;
   } catch (error) {
     console.error("Error:", error);
-    throw error; 
+    throw error;
   }
 }
+
+async function httpSaveFavoriteLink(userId, pathName, path) {
+  try {
+    const response = await fetch(`${API_URL}/menu/favorite-links`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, pathName, path }),
+    });
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+}
+
+async function httpGetSavedFavoriteLinks(userId) {
+  try {
+    const response = await fetch(`${API_URL}/menu/favorite-links/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+}
+
+async function httpGetSavedOptions() {
+  try {
+    const response = await fetch(`${API_URL}/menu/get-options`);
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+}
+
+async function httpGetEmployees(payload) {
+  try {
+    const queryParams = new URLSearchParams(payload).toString();
+    const url = `${API_URL}/actions/employee${queryParams ? `?${queryParams}` : ''}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Error:", err);
+    throw err;
+  }
+}
+
 
 export {
   httpRegisterUser,
@@ -155,4 +230,8 @@ export {
   httpGetLength,
   httpGetNotifications,
   httpApproveApproval,
+  httpSaveFavoriteLink,
+  httpGetSavedFavoriteLinks,
+  httpGetSavedOptions,
+  httpGetEmployees,
 };

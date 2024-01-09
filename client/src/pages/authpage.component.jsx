@@ -104,7 +104,7 @@ const Authentication = () => {
     const user = {
       username: formData.username,
       password: formData.password,
-      fullname: formData.fullName,
+      fullName: formData.fullName,
       email: formData.email,
     };
 

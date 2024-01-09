@@ -23,7 +23,10 @@ const approvalSchema = new mongoose.Schema({
     approved: Boolean,
     processCode: String,
     title: String,
-    created: Date,
+    created: {
+      type: String, 
+      default: () => new Date().toISOString().split('T')[0], // Format to YYYY-MM-DD
+    },
     reason: String,
     header: headerSchema,
     detail: detailSchema,

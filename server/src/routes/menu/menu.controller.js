@@ -1,25 +1,24 @@
 const Notification = require("../../models/notification.mongo");
 const Approval = require("../../models/approval.mongo");
 const User = require("../../models/user.mongo");
+const Option = require('../../models/options.mongo')
 const { saveNotification } = require("../../models/notification.model");
 const { saveApproval } = require("../../models/approval.model");
 
 async function httpSaveApproval(req, res) {
   try {
-    const {
-      userId,
-      approvalId,
-      approved,
-      processCode,
-      title,
-      created,
-      reason,
-      header,
-      detail,
-    } = req.body;
+    const { userId, approved, processCode, title, reason, header, detail } =
+      req.body;
+    // Retrieve the latest user to generate a new userId
+    const latestApproval = await Approval.findOne(
+      {},
+      { approvalId: 1 },
+      { sort: { approvalId: -1 } }
+    );
+    const approvalId = latestApproval ? latestApproval.approvalId + 1 : 0;
 
     // Server-side validation
-    if (!userId || !title || !created || !reason || !header || !detail) {
+    if (!userId || !title || !reason || !header || !detail) {
       return res
         .status(400)
         .json({ error: "Bad Request - Missing required fields" });
@@ -39,7 +38,6 @@ async function httpSaveApproval(req, res) {
       approved,
       processCode,
       title,
-      created,
       reason,
       header,
       detail,
@@ -141,8 +139,8 @@ async function httpApproveApproval(req, res) {
     const approval = await Approval.findOne({ approvalId });
     approval.approved = true;
     addNotificationOnApprovalCreation(approval);
-    await Approval.deleteOne({approvalId});
-    res.json(approval).status(201)
+    await Approval.deleteOne({ approvalId });
+    res.json(approval).status(201);
   } catch (error) {}
 }
 
@@ -190,10 +188,10 @@ async function addNotificationOnApprovalCreation(approval) {
 
 async function httpSaveNotification(req, res) {
   try {
-    const { userId, title, created, reason, header, detail } = req.body;
+    const { userId, title, reason, header, detail } = req.body;
 
     // Server-side validation
-    if (!userId || !title || !created || !reason || !header || !detail) {
+    if (!userId || !title || !reason || !header || !detail) {
       return res
         .status(400)
         .json({ error: "Bad Request - Missing required fields" });
@@ -210,7 +208,6 @@ async function httpSaveNotification(req, res) {
     const newNotification = new Notification({
       userId,
       title,
-      created,
       reason,
       header,
       detail,
@@ -279,6 +276,91 @@ async function httpGetNotificationsLength(req, res) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
+
+async function httpSaveFavoriteLink(req, res) {
+  const { userId, pathName, path } = req.body;
+
+  try {
+    // Find the user by userId
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+    }8
+
+    // Check if the link already exists in favoriteLinks
+    const linkExists = user.favoriteLinks.some(link => link.path === path || link.pathName === pathName);
+
+    if (linkExists) {
+      // Do nothing and return
+    } else {
+      // Check if pathName and path are provided before pushing to the array
+      if (!pathName || !path) {
+        return res.status(400).json({ error: 'Both pathName and path are required' });
+      }
+
+      // Add the new URL to the favoriteLinks array
+      user.favoriteLinks.push({ pathName, path });
+
+      // Save the updated user
+      await user.save();
+    }
+
+    res.status(201).json(user);
+  } catch (error) {
+    console.error("Error saving favorite link:", error.message);
+    res
+      .status(500)
+      .json({ error: "Internal Server Error", message: error.message });
+  }
+}
+
+async function httpGetSavedFavoriteLinks(req, res) {
+
+  const userId  = req.params.userId;
+  try {
+    // Find the user by userId
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Retrieve the favoriteLinks array from the user
+    const favoriteLinks = user.favoriteLinks || [];
+
+    res.status(200).json(favoriteLinks);
+  } catch (error) {
+    console.error('Error retrieving favorite links:', error.message);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
+}
+
+async function httpSaveOptions(req, res) {
+  try {
+    const optionsData = req.body;
+
+    // Assuming optionsData is an array of options
+    const savedOptions = await Option.create(optionsData);
+
+    res.status(201).json(savedOptions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+async function httpGetOptions(req, res) {
+  try {
+    const options = await Option.find(); // This retrieves all options from the database
+
+    res.status(200).json(options);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
 module.exports = {
   httpSaveApproval,
   httpGetApprovals,
@@ -287,4 +369,8 @@ module.exports = {
   httpSaveNotification,
   httpGetNotificationsLength,
   httpGetNotifications,
+  httpSaveFavoriteLink,
+  httpGetSavedFavoriteLinks,
+  httpSaveOptions,
+  httpGetOptions,
 };
