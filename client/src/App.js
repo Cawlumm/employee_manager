@@ -17,11 +17,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route element={<PersistLogin />}>
-              {/* <Route element={<RequireAuth />}> */}
+              <Route element={<RequireAuth />}>
                 <Route index element={<LandingMenu />} />
                 <Route path="/actions" element={<Actions />} />
                 <Route path="/actions-inquiry" element={<ActionsInquiry />} />
-              {/* </Route> */}
+              </Route>
             </Route>
             <Route path="/authentication" element={<Authentication />} />
           </Route>
