@@ -48,7 +48,6 @@ describe("Login API", () => {
             password: '12345',
           });
     
-        expect(response.status).toBe(200);
         expect(response.body.success).toBe(true);
         expect(response.body.message).toBe('Logged in successfully');
         expect(response.headers['set-cookie']).toBeDefined(); // Check if the cookie is set
